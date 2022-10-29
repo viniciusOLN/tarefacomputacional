@@ -57,31 +57,29 @@ void main() {
       i++;
       jubileuLinha = [];
       jubileu = 7;
-    }
-
-    if (!jubileuLinha.isNotEmpty) {
       continue;
     }
 
     if (jubileuLinha[1] == jubileuLinha[3]) {
       int coordX = coordsBallons[i];
       int coordYLine = jubileuLinha[1];
+
       print("$coordX, $coordYLine");
+
       coordYBaloon = 0;
       i++;
       jubileuLinha = [];
       jubileu = 7;
-    } else {
-      if (!jubileuLinha.isEmpty) {
-        coordsBallons[i] = jubileuLinha[3] < jubileuLinha[1]
-            ? jubileuLinha[0]
-            : jubileuLinha[2];
-        coordYBaloon = jubileuLinha[3] < jubileuLinha[1]
-            ? jubileuLinha[1]
-            : jubileuLinha[3];
-        jubileuLinha = [];
-        jubileu = 7;
-      }
+      continue;
+    }
+
+    if (!jubileuLinha.isEmpty) {
+      coordsBallons[i] =
+          jubileuLinha[3] < jubileuLinha[1] ? jubileuLinha[0] : jubileuLinha[2];
+      coordYBaloon =
+          jubileuLinha[3] < jubileuLinha[1] ? jubileuLinha[1] : jubileuLinha[3];
+      jubileuLinha = [];
+      jubileu = 7;
     }
   }
 }
