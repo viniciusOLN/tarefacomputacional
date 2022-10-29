@@ -1,26 +1,33 @@
 void main() {
   List<int> numLinesNQuerys = [4, 4];
   List<List<int>> coordsLine = [
-    [0, 1, 3, 3],
-    [1, 5, 6, 5],
-    [5, 3, 2, 4],
-    [7, 4, 10, 2],
+    [1, 3, 4, 2],
+    [10, 3, 7, 4],
+    [2, 3, 8, 3],
+    [3, 5, 5, 4],
+
+    // [0, 1, 3, 3],
+    // [1, 5, 6, 5],
+    // [5, 3, 2, 4],
+    // [7, 4, 10, 2],
   ];
   List<int> coordsBallons = [
-    2,
-    5,
+    4,
+    9,
     8,
-    6,
+
+    // 2,
+    // 5,
+    // 8,
+    // 6,
   ];
 
-  List<String> result = [];
   int coordYBaloon = 0;
   int i = 0;
+  double jubileu = 7;
+  List<int> jubileuLinha = [];
 
   while (coordsBallons.length > i) {
-    coordYBaloon++;
-    // int coordXBallon = coordsBallons[i];
-
     for (int j = 0; j < coordsLine.length; j++) {
       int coordInitYLine = coordsLine[j][1];
       int coordFinalYLine = coordsLine[j][3];
@@ -31,24 +38,49 @@ void main() {
       int biggerCoordX =
           coordInitXLine < coordFinalXLine ? coordFinalXLine : coordInitXLine;
 
-      if (((coordYBaloon == coordInitYLine) ||
-              (coordYBaloon == coordFinalYLine)) &&
-          ((coordsBallons[i] >= smallestCoordX) &&
-              (coordsBallons[i] <= biggerCoordX))) {
-        if (coordInitYLine == coordFinalYLine) {
-          int coordX = coordsBallons[i];
-          print("$coordX, $coordYBaloon");
-          coordYBaloon = 0;
-          i++;
-          break;
-        } else {
-          coordsBallons[i] = coordFinalYLine < coordInitYLine
-              ? coordInitXLine
-              : coordFinalXLine;
-          coordYBaloon = coordFinalYLine < coordInitYLine
-              ? coordInitYLine
-              : coordFinalYLine;
-        }
+      double m = (coordInitYLine - coordFinalYLine) /
+          (coordInitXLine - coordFinalXLine);
+      double line = coordInitYLine + (m * (coordsBallons[i] - coordInitXLine));
+
+      if (line - coordYBaloon > 0 &&
+          jubileu > (line - coordYBaloon) &&
+          coordsBallons[i] >= smallestCoordX &&
+          coordsBallons[i] <= biggerCoordX) {
+        jubileu = line - coordYBaloon;
+        jubileuLinha = coordsLine[j];
+      }
+    }
+
+    if (jubileuLinha.isEmpty) {
+      print(coordsBallons[i]);
+      coordYBaloon = 0;
+      i++;
+      jubileuLinha = [];
+      jubileu = 7;
+    }
+
+    if (!jubileuLinha.isNotEmpty) {
+      continue;
+    }
+
+    if (jubileuLinha[1] == jubileuLinha[3]) {
+      int coordX = coordsBallons[i];
+      int coordYLine = jubileuLinha[1];
+      print("$coordX, $coordYLine");
+      coordYBaloon = 0;
+      i++;
+      jubileuLinha = [];
+      jubileu = 7;
+    } else {
+      if (!jubileuLinha.isEmpty) {
+        coordsBallons[i] = jubileuLinha[3] < jubileuLinha[1]
+            ? jubileuLinha[0]
+            : jubileuLinha[2];
+        coordYBaloon = jubileuLinha[3] < jubileuLinha[1]
+            ? jubileuLinha[1]
+            : jubileuLinha[3];
+        jubileuLinha = [];
+        jubileu = 7;
       }
     }
   }
